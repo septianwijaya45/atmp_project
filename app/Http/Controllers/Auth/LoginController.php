@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
 {
@@ -36,5 +39,33 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function login(Request $request)
+    {
+        if(Auth::attempt([
+            'nik'       => $request->nik,
+            'password'  => $request->password,
+            'role_id'   => 1
+        ])){
+            Session::put('sweetalert', 'warning');
+            return redirect()->route('dashboard')->with('alert', 'Selamat Datang!');
+        }elseif(Auth::attempt([
+            'nik'       => $request->nik,
+            'password'  => $request->password,
+            'role_id'   => 2
+        ])){
+            Session::put('sweetalert', 'warning');
+            return redirect()->route('dashboard')->with('alert', 'Selamat Datang!');
+        }else{
+            return redirect('login')->with('alert','NIK atau Password anda salah!');
+        }
+    }
+    
+    public function logout()
+    {
+        Auth::logout();
+        Session::put('sweetalert', 'success');
+        return redirect('login')->with('success', 'Berhasil Log Out!');
     }
 }

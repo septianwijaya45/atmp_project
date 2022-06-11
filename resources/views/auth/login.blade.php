@@ -20,14 +20,15 @@
             <div class="col-lg-5 col-12">
                 <div id="auth-left">
                     <div class="auth-logo">
-                        <a href="index.html"><img src="{{asset('backend/images/logo/logo.png')}}" alt="Logo"></a>
+                        <img src="{{asset('backend/images/logo/logo.png')}}" alt="Logo">
                     </div>
                     <h1 class="auth-title">Login.</h1>
 
-                    <form action="index.html" method="POST" enctype="multipart/form-data" autocomplete="off">
+                    <form action="{{route('post-login')}}" method="POST" enctype="multipart/form-data" autocomplete="off">
+                        @method('patch')
                         @csrf
                         <div class="form-group position-relative has-icon-left mb-4">
-                            <input type="text" name="NIK" class="form-control form-control-xl" placeholder="NIK Anda">
+                            <input type="text" name="nik" id="nik" class="form-control form-control-xl" placeholder="NIK Anda">
                             <div class="form-control-icon">
                                 <i class="bi bi-person"></i>
                             </div>
@@ -46,8 +47,18 @@
                         </div>
                         <div class="form-group position-relative has-icon-left mb-4">
                             <span class="text-center" id='message'></span>
+                            @if(\Session::has('alert'))
+                                <div class="alert alert-danger" id="warning">
+                                    <div>{{Session::get('alert')}}</div>
+                                </div>
+                            @endif
+                            @if(\Session::has('success'))
+                                <div class="alert alert-success" id="success">
+                                    <div>{{Session::get('success')}}</div>
+                                </div>
+                            @endif
                         </div>
-                        <button type="submit" id="btn-submit" class="btn btn-primary btn-block btn-lg shadow-lg mt-5">Log in</button>
+                        <button type="submit" id="btn-submit" class="btn btn-primary btn-block btn-lg shadow-lg mt-5" disabled>Log in</button>
                     </form>
                 </div>
             </div>
@@ -62,16 +73,43 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/Javascript">
+    // Value Input
+    $('#nik, #password').on('keyup', function(){
+        let nik = $('#nik').val();
+        let pass = $('#password').val();
+
+        if(nik === '' && pass === ''){
+            $('#btn-submit').attr('disabled', true);
+        }else{
+            $('#btn-submit').attr('disabled', false);
+        }
+    });
+
     //Password Change Validation
     $('#password, #confirm_password').on('keyup', function () {
-        if ($('#password').val() == $('#confirm_password').val()) {
-            $('#message').html('Matching').css('color', 'green');
-            $('#btn-submit').attr('disabled', false);
+        let pass = $('#password').val();
+        let confirm_pass = $('#confirm_password').val();
+
+        if (pass == confirm_pass) {
+            if(pass === '' && confirm_pass == ''){
+                $('#message').html('').css('color', 'green');
+            }else{
+                $('#message').html('Matching').css('color', 'green');
+                $('#btn-submit').attr('disabled', false);
+            }
         } else {
             $('#message').html('Not Matching').css('color', 'red');
             $('#btn-submit').attr('disabled', true);
         }
     });
+
+    setTimeout(() => {
+        $('#warning').remove();
+    }, 5000);
+
+    setTimeout(() => {
+        $('#success').remove();
+    }, 2000);
 </script>
 
 </html>
