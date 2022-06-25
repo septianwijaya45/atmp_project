@@ -9,6 +9,8 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{asset('backend/images/logo/logo.png')}}">
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
+    <!-- CSRF_TOKEN -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('backend/css/bootstrap.css')}}">
 
@@ -18,6 +20,8 @@
     <link rel="stylesheet" href="{{asset('backend/vendors/bootstrap-icons/bootstrap-icons.css')}}">
     <link rel="stylesheet" href="{{asset('backend/css/app.css')}}">
     <link rel="shortcut icon" href="{{asset('backend/images/favicon.svg')}}" type="image/x-icon">
+    <!-- Calendar -->
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.css' />
     @yield('header')
 </head>
 
@@ -46,6 +50,52 @@
             </footer>
         </div>
     </div>
+    <!-- Jquery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- SweetAlert -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script type="text/javascript">
+        $(function() {
+            const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+            });
+
+            $('.swalDefaultSuccess').show(function() {
+            Toast.fire({
+                icon: 'success',
+                title: '{{Session::get('alert')}}'
+            })
+            });
+            $('.swalDefaultInfo').show(function() {
+            Toast.fire({
+                icon: 'info',
+                title: '{{Session::get('alert')}}'
+            })
+            });
+            $('.swalDefaultError').show(function() {
+            Toast.fire({
+                icon: 'error',
+                title: '{{Session::get('alert')}}'
+            })
+            });
+            $('.swalDefaultWarning').show(function() {
+            Toast.fire({
+                icon: 'warning',
+                title: '{{Session::get('alert')}}'
+            })
+            });
+            $('.swalDefaultQuestion').show(function() {
+            Toast.fire({
+                icon: 'question',
+                title: '{{Session::get('alert')}}'
+            })
+            });
+        });
+    </script>
+
     <script src="{{asset('backend/vendors/perfect-scrollbar/perfect-scrollbar.min.js')}}"></script>
     <script src="{{asset('backend/js/bootstrap.bundle.min.js')}}"></script>
 
@@ -53,9 +103,13 @@
     <script src="{{asset('backend/js/pages/dashboard.js')}}"></script>
 
     <script src="{{asset('backend/js/main.j')}}s"></script>
-    <!-- Sweet Alert -->
+    <!-- SweetAlert
+    ============================================ -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <!-- Calendar -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.js'></script>
 
     @yield('footer')
 </body>

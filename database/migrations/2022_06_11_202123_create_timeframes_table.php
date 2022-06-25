@@ -17,17 +17,20 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('atmp_id');
             $table->unsignedBigInteger('jenissite_id');
-            $table->date('plant_start');
-            $table->date('plant_finish');
-            $table->date('actual_start');
-            $table->date('actual_finish');
-            $table->integer('tot_peserta');
-            $table->integer('act_peserta');
-            $table->integer('achiv_peserta');
-            $table->text('instruktur');
-            $table->integer('percent_achiv_peserta');
-            $table->integer('percent_achiv_event_month');
+            $table->date('plant_start')->nullable();
+            $table->date('plant_finish')->nullable();
+            $table->date('actual_start')->nullable();
+            $table->date('actual_finish')->nullable();
+            $table->integer('tot_peserta')->nullable();
+            $table->integer('act_peserta')->nullable();
+            $table->integer('achiv_peserta')->nullable();
+            $table->text('instruktur')->nullable();
+            $table->integer('percent_achiv_peserta')->nullable();
+            $table->integer('percent_achiv_event_month')->nullable();
             $table->timestamps();
+
+            $table->foreign('atmp_id')->references('id')->on('atmps')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('jenissite_id')->references('id')->on('jenissites')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

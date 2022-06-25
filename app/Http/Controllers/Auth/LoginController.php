@@ -56,7 +56,7 @@ class LoginController extends Controller
             'role_id'   => 2
         ])){
             Session::put('sweetalert', 'warning');
-            return redirect()->route('dashboard')->with('alert', 'Selamat Datang!');
+            return redirect()->route('dashboardAdmin')->with('alert', 'Selamat Datang!');
         }else{
             return redirect('login')->with('alert','NIK atau Password anda salah!');
         }

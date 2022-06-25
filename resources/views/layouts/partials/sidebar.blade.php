@@ -1,3 +1,10 @@
+<?php
+
+use App\Models\Jenissite;
+
+    $plant = Jenissite::where('atmp_id', 1)->get();
+    $produksi = Jenissite::where('atmp_id', 2)->get();
+?>
 <div id="sidebar" class="active">
     <div class="sidebar-wrapper active">
         <div class="sidebar-header">
@@ -15,7 +22,7 @@
                 <li class="sidebar-title">Menu</li>
 
                 <li class="sidebar-item active ">
-                    <a href="index.html" class='sidebar-link'>
+                    <a href="{{route('dashboard')}}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Dashboard</span>
                     </a>
@@ -29,12 +36,95 @@
                         <span>ATMP</span>
                     </a>
                     <ul class="submenu ">
-                        <li class="submenu-item ">
-                            <a href="component-alert.html">Plant</a>
+                        <li class="sidebar-item has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <span>Plant</span>
+                            </a>
+                            <ul class="submenu">
+                                @if(Auth::user()->role_id == 1)
+                                    @foreach($plant as $data)
+                                        <li class="submenu-item ">
+                                            <a href="{{ route($data->name, [$data->name, 'Plant']) }}">{{$data->name}}</a>
+                                        </li>
+                                    @endforeach
+                                @else
+                                    @if(Auth::user()->id == 2)
+                                        <li class="submenu-item ">
+                                            <a href="{{ route('a.'.$plant[2]->name, [$plant[2]->name, 'Plant']) }}">{{$plant[2]->name}}</a>
+                                        </li>
+                                    @elseif(Auth::user()->id == 3)
+                                        <li class="submenu-item ">
+                                            <a href="{{ route('a.'.$plant[3]->name, [$plant[3]->name, 'Plant']) }}">{{$plant[3]->name}}</a>
+                                        </li>
+                                    @elseif(Auth::user()->id == 4)
+                                        <li class="submenu-item ">
+                                            <a href="{{ route('a.'.$plant[4]->name, [$plant[4]->name, 'Plant']) }}">{{$plant[4]->name}}</a>
+                                        </li>
+                                    @elseif(Auth::user()->id == 5)
+                                        <li class="submenu-item ">
+                                            <a href="{{ route('a.'.$plant[5]->name, [$plant[5]->name, 'Plant']) }}">{{$plant[5]->name}}</a>
+                                        </li>
+                                    @elseif(Auth::user()->id == 6)
+                                        <li class="submenu-item ">
+                                            <a href="{{ route('a.'.$plant[6]->name, [$plant[6]->name, 'Plant']) }}">{{$plant[6]->name}}</a>
+                                        </li>
+                                    @elseif(Auth::user()->id == 7)
+                                        <li class="submenu-item ">
+                                            <a href="{{ route('a.'.$plant[7]->name, [$plant[7]->name, 'Plant']) }}">{{$plant[7]->name}}</a>
+                                        </li>
+                                    @else
+                                        <li class="submenu-item ">
+                                            <a href="{{ route('a.'.$plant[8]->name, [$plant[8]->name, 'Plant']) }}">{{$plant[8]->name}}</a>
+                                        </li>
+                                    @endif
+                                @endif
+                            </ul>
                         </li>
-                        <li class="submenu-item ">
-                            <a href="component-badge.html">Produksi</a>
+                        <li class="sidebar-item has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <span>Produksi</span>
+                            </a>
+                            <ul class="submenu">
+                                @if(Auth::user()->role_id == 1)
+                                    @foreach($produksi as $data)
+                                        <li class="submenu-item ">
+                                            <a href="{{ route($data->name, [$data->name, 'Produksi']) }}">{{$data->name}}</a>
+                                        </li>
+                                    @endforeach
+                                @else
+                                    @if(Auth::user()->id == 2)
+                                        <li class="submenu-item ">
+                                            <a href="{{ route('a.'.$produksi[2]->name, [$produksi[2]->name, 'Produksi']) }}">{{$produksi[2]->name}}</a>
+                                        </li>
+                                    @elseif(Auth::user()->id == 3)
+                                        <li class="submenu-item ">
+                                            <a href="{{ route('a.'.$produksi[3]->name, [$produksi[3]->name, 'Produksi']) }}">{{$produksi[3]->name}}</a>
+                                        </li>
+                                    @elseif(Auth::user()->id == 4)
+                                        <li class="submenu-item ">
+                                            <a href="{{ route('a.'.$produksi[4]->name, [$produksi[4]->name, 'Produksi']) }}">{{$produksi[4]->name}}</a>
+                                        </li>
+                                    @elseif(Auth::user()->id == 5)
+                                        <li class="submenu-item ">
+                                            <a href="{{ route('a.'.$produksi[5]->name, [$produksi[5]->name, 'Produksi']) }}">{{$produksi[5]->name}}</a>
+                                        </li>
+                                    @elseif(Auth::user()->id == 6)
+                                        <li class="submenu-item ">
+                                            <a href="{{ route('a.'.$produksi[6]->name, [$produksi[6]->name, 'Produksi']) }}">{{$produksi[6]->name}}</a>
+                                        </li>
+                                    @elseif(Auth::user()->id == 7)
+                                        <li class="submenu-item ">
+                                            <a href="{{ route('a.'.$produksi[7]->name, [$produksi[7]->name, 'Produksi']) }}">{{$produksi[7]->name}}</a>
+                                        </li>
+                                    @else
+                                        <li class="submenu-item ">
+                                            <a href="{{ route('a.'.$produksi[8]->name, [$produksi[8]->name, 'Produksi']) }}">{{$produksi[8]->name}}</a>
+                                        </li>
+                                    @endif
+                                @endif
+                            </ul>
                         </li>
+                        
                     </ul>
                 </li>
 
