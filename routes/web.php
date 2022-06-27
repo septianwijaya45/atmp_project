@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Backend\AdminController;
 use App\Http\Controllers\Backend\AtmpController;
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Jenissite;
 use Illuminate\Support\Facades\DB;
@@ -47,11 +49,32 @@ Route::group(['middleware' => ['web', 'auth', 'roles']], function(){
                 Route::get('/{'.$data->name.'}/{'.$data->atmp_name.'}', [AtmpController::class, 'index'])->name(''.$data->name.'');
             }
 
-            Route::get('/Tambah-Data/{name}', [AtmpController::class, 'insert'])->name('insertPlant');
-            Route::post('/Store-Data-Plant/{name}', [AtmpController::class, 'storePlant'])->name('storePlant');
-            Route::get('/Detail-Data/{name}/{id}', [AtmpController::class, 'detail'])->name('detailPlant');
-            Route::post('/Update-Data/{name}/{id}', [AtmpController::class, 'updatePlant'])->name('updatePlant');
-            Route::get('/Delete-Data/{name}/{id}', [AtmpController::class, 'destroy'])->name('deletePlant');
+            Route::get('/Data-ATMP/Add-Data/{name}/{atmp_name}', [AtmpController::class, 'insert'])->name('insertATMP');
+            Route::post('/Store-Data/{name}/{atmp_name}', [AtmpController::class, 'storeATMP'])->name('storeATMP');
+            Route::get('/Data-ATMP/Detail-Data/{name}/{id}', [AtmpController::class, 'detail'])->name('detailATMP');
+            Route::post('/Update-Data/{name}/{id}/{atmp_name}', [AtmpController::class, 'updateATMP'])->name('updateATMP');
+            Route::get('/Delete-Data/{name}/{id}/{atmp_name}', [AtmpController::class, 'destroy'])->name('deleteATMP');
+        });
+
+        // Admin
+        Route::group(['prefix'  => 'Admin'], function(){
+            Route::get('/', [AdminController::class, 'index'])->name('admin');
+            // Add
+            Route::get('/Tambah-Data', [AdminController::class, 'create'])->name('addAdmin');
+            Route::post('/Tambah-Data/Simpan', [AdminController::class, 'store'])->name('storeAdmin');
+            // Edit
+            Route::get('/Edit-Data/{id}', [AdminController::class, 'edit'])->name('editAdmin');
+            Route::post('/Update-Data/{id}', [AdminController::class, 'update'])->name('updateAdmin');
+            // Delete
+            Route::delete('/Delete/{id}', [AdminController::class, 'destroy'])->name('destroyAdmin');
+            // Reset Password
+            Route::get('/Reset-Password/{id}', [AdminController::class, 'resetPassword'])->name('resetPasswordAdmin');
+        });
+
+        // Profile
+        Route::group(['prefix'  => 'Profile'], function(){
+            Route::get('/{id}', [UserController::class, 'index'])->name('profile');
+            Route::post('/Simpan-Data/{id}', [UserController::class, 'update'])->name('updateProfile');
         });
     });
 
@@ -71,11 +94,18 @@ Route::group(['middleware' => ['web', 'auth', 'roles']], function(){
                 Route::get('/{'.$data->name.'}/{'.$data->atmp_name.'}', [AtmpController::class, 'index'])->name('a.'.$data->name.'');
             }
 
-            Route::get('/Tambah-Data/{name}', [AtmpController::class, 'insert'])->name('a.insertPlant');
-            Route::post('/Store-Data-Plant/{name}', [AtmpController::class, 'storePlant'])->name('a.storePlant');
-            Route::get('/Detail-Data/{name}/{id}', [AtmpController::class, 'detail'])->name('a.detailPlant');
-            Route::post('/Update-Data/{name}/{id}', [AtmpController::class, 'updatePlant'])->name('a.updatePlant');
-            Route::get('/Delete-Data/{name}/{id}', [AtmpController::class, 'destroy'])->name('a.deletePlant');
+            Route::get('/Data-ATMP/Add-Data/{name}/{atmp_name}', [AtmpController::class, 'insert'])->name('a.insertATMP');
+            Route::post('/Store-Data/{name}/{atmp_name}', [AtmpController::class, 'storeATMP'])->name('a.storeATMP');
+            Route::get('/Data-ATMP/Detail-Data/{name}/{id}', [AtmpController::class, 'detail'])->name('a.detailATMP');
+            Route::post('/Update-Data/{name}/{id}/{atmp_name}', [AtmpController::class, 'updateATMP'])->name('a.updateATMP');
+            Route::get('/Delete-Data/{name}/{id}/{atmp_name}', [AtmpController::class, 'destroy'])->name('a.deleteATMP');
+        });
+
+
+        // Profile
+        Route::group(['prefix'  => 'Profile'], function(){
+            Route::get('/{id}', [UserController::class, 'index'])->name('a.profile');
+            Route::post('/Simpan-Data/{id}', [UserController::class, 'update'])->name('a.updateProfile');
         });
     });
 });

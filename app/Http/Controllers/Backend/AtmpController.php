@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Atmp;
 use App\Models\Jenissite;
 use App\Models\Timeframe;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -55,17 +57,27 @@ class AtmpController extends Controller
             ");
         }
 
-        return view('atmp.index', compact(['events', 'events2', 'name', 'atmpPlant', 'atmpActual']));
+        return view('atmp.index', compact(['events', 'events2', 'name', 'atmpPlant', 'atmpActual', 'atmp_name']));
     }
 
-    public function insert($name)
+    public function insert($name, $atmp_name)
     {
-        $id = Jenissite::where('name', $name)->value('id');
+        if($atmp_name == 'Plant'){
+            $id = Jenissite::where([
+                    ['name', $name],
+                    ['atmp_id', 1]
+                ])->value('id');
+        }else{
+            $id = Jenissite::where([
+                    ['name', $name],
+                    ['atmp_id', 2]
+                ])->value('id');
+        }
         $jenissite = Jenissite::all();
-        return view('atmp.insert', compact(['id', 'name', 'jenissite']));
+        return view('atmp.insert', compact(['id', 'name', 'jenissite', 'atmp_name']));
     }
 
-    public function storePlant(Request $request, $name)
+    public function storeATMP(Request $request, $name, $atmp_name)
     {
         // $validate = Validator::make($request->all(),)
 
@@ -87,18 +99,23 @@ class AtmpController extends Controller
         ]);
 
         Session::put('sweetalert', 'success');
-        return redirect()->route($name, $name)->with('alert', 'Berhasil Menambahkan Data Timeframe '.$name.'!');
+        if(Auth::user()->role_id == 1){
+            return redirect()->route($name,[$name, $atmp_name])->with('alert', 'Berhasil Menambahkan Data Timeframe '.$name.'!');
+        }else{
+            return redirect()->route('a.'.$name,[$name, $atmp_name])->with('alert', 'Berhasil Menambahkan Data Timeframe '.$name.'!');
+        }
     }
 
     public function detail($name, $id)
     {
         $data = Timeframe::where('id', $id)->first();
+        $atmp_id = Jenissite::where('id', $data->jenissite_id)->value('atmp_id');
+        $atmp_name = Atmp::where('id', $atmp_id)->value('name');
         $jenissite = Jenissite::all();
-        dd($data);
-        return view('atmp.detail', compact(['name', 'id', 'data', 'jenissite']));
+        return view('atmp.detail', compact(['name', 'id', 'data', 'jenissite', 'atmp_name']));
     }
 
-    public function updatePlant(Request $request, $name, $id)
+    public function updateATMP(Request $request, $name, $id, $atmp_name)
     {
         // $validate = Validator::make($request->all(),)
 
@@ -119,10 +136,14 @@ class AtmpController extends Controller
         ]);
 
         Session::put('sweetalert', 'success');
-        return redirect()->route($name, $name)->with('alert', 'Berhasil Mengupdate Data Timeframe '.$name.'!');
+        if(Auth::user()->role_id == 1){
+            return redirect()->route($name,[$name, $atmp_name])->with('alert', 'Berhasil Mengupdate Data Timeframe '.$name.'!');
+        }else{
+            return redirect()->route('a.'.$name,[$name, $atmp_name])->with('alert', 'Berhasil Mengupdate Data Timeframe '.$name.'!');
+        }
     }
 
-    public function destroy($name, $id)
+    public function destroy($name, $id, $atmp_name)
     {
         $timeframe = Timeframe::where('id', $id)->first();
         if(!empty($timeframe)){
@@ -130,7 +151,11 @@ class AtmpController extends Controller
         }
 
         Session::put('sweetalert', 'success');
-        return redirect()->route($name, $name)->with('alert', 'Berhasil Menghapus Data Timeframe '.$name.'!');
+        if(Auth::user()->role_id == 1){
+            return redirect()->route($name,[$name, $atmp_name])->with('alert', 'Berhasil Menghapus Data Timeframe '.$name.'!');
+        }else{
+            return redirect()->route('a.'.$name,[$name, $atmp_name])->with('alert', 'Berhasil Menghapus Data Timeframe '.$name.'!');
+        }
     }
 
 }

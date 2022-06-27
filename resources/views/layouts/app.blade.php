@@ -13,6 +13,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('backend/css/bootstrap.css')}}">
+    <link rel="stylesheet" href="{{asset('backend/vendors/simple-datatables/style.css')}}">
 
     <link rel="stylesheet" href="{{asset('backend/vendors/iconly/bold.css')}}">
 
@@ -110,6 +111,13 @@
     <!-- Calendar -->
     <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.js'></script>
+    <!-- Datatable -->
+    <script src="{{asset('backend/vendors/simple-datatables/simple-datatables.js')}}"></script>
+    <script>
+        // Simple Datatable
+        let table1 = document.querySelector('#table1');
+        let dataTable = new simpleDatatables.DataTable(table1);
+    </script>
 
     @yield('footer')
 </body>

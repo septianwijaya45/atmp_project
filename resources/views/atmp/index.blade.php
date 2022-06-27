@@ -39,10 +39,17 @@
                             <h3>Data ATMP {{$name}}</h3>
                         </div>
                         <div class="col-md-6">
-                            <a href="{{ route('insertPlant', $name) }}" class="btn btn-primary float-end">
-                                <i class="bi bi-plus"></i>
-                                Tambah Data
-                            </a>
+                            @if(Auth::user()->role_id == 1)
+                                <a href="{{ route('insertATMP', [$name, $atmp_name]) }}" class="btn btn-primary float-end">
+                                    <i class="bi bi-plus"></i>
+                                    Tambah Data
+                                </a>
+                            @else
+                                <a href="{{ route('a.insertATMP', [$name, $atmp_name]) }}" class="btn btn-primary float-end">
+                                    <i class="bi bi-plus"></i>
+                                    Tambah Data
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -63,6 +70,7 @@
 @stop
 
 @section('footer')
+@if(Auth::user()->role_id == 1)
 <script>
     $(document).ready(function () {
             // page is now ready, initialize the calendar...
@@ -81,7 +89,7 @@
                             'title': 'Plant-'+{!! json_encode($data->name) !!},
                             'start': {!! json_encode($data->plan_start) !!},
                             'color':  '#FFC54D',
-                            'url'  : {!! json_encode( route('detailPlant', ['name' => $name, 'id' => $data->id]) ) !!}
+                            'url'  : {!! json_encode( route('detailATMP', ['name' => $name, 'id' => $data->id]) ) !!}
                         },
                     @endforeach
                     @foreach($atmpActual as $data)
@@ -95,11 +103,52 @@
                             @else
                                 'color': '#53BF9D',
                             @endif
-                            'url'  : {!! json_encode( route('detailPlant', ['name' => $name, 'id' => $data->id]) ) !!}
+                            'url'  : {!! json_encode( route('detailATMP', ['name' => $name, 'id' => $data->id]) ) !!}
                         },
                     @endforeach
                 ]
             })
         });
 </script>
+@else
+<script>
+    $(document).ready(function () {
+            // page is now ready, initialize the calendar...
+            events={!! json_encode($events) !!};
+            $('#calendar').fullCalendar({
+                // put your options and callbacks here
+                initialView: 'listWeek',
+                header:{
+                    left:'prev,next today',
+                    center:'title',
+                    right:'month,agendaWeek,agendaDay'
+                },
+                events: [
+                    @foreach($atmpPlant as $data)
+                        {
+                            'title': 'Plant-'+{!! json_encode($data->name) !!},
+                            'start': {!! json_encode($data->plan_start) !!},
+                            'color':  '#FFC54D',
+                            'url'  : {!! json_encode( route('a.detailATMP', ['name' => $name, 'id' => $data->id]) ) !!}
+                        },
+                    @endforeach
+                    @foreach($atmpActual as $data)
+                        {
+                            'title': 'Actual-'+{!! json_encode($data->name) !!},
+                            'start': {!! json_encode($data->actual_start) !!},
+                            @if(empty($data->achiv_peserta))
+                                'color': '#990000',
+                            @elseif(empty($data->plan_start))
+                                'color': '#8D8DAA',
+                            @else
+                                'color': '#53BF9D',
+                            @endif
+                            'url'  : {!! json_encode( route('a.detailATMP', ['name' => $name, 'id' => $data->id]) ) !!}
+                        },
+                    @endforeach
+                ]
+            })
+        });
+</script>
+@endif
 @stop

@@ -35,7 +35,11 @@
             <div class="card-header">
                 <h4 class="card-title">Form Tambah Data</h4>
             </div>
-            <form action="{{ route('storePlant', $name) }}" method="POST" enctype="multipart/form-data" autocomplete="off">
+            @if(Auth::user()->role_id ==  1)
+                <form action="{{ route('storeATMP', [$name, $atmp_name]) }}" method="POST" enctype="multipart/form-data" autocomplete="off">
+            @else
+                <form action="{{ route('a.storeATMP', [$name, $atmp_name]) }}" method="POST" enctype="multipart/form-data" autocomplete="off">
+            @endif
                 @csrf
                 <div class="card-body">
                     <div class="row">
@@ -111,7 +115,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="plan_finish">Plan Finish</label>
-                                <input type="date" class="form-control @error('plan_finish') is-invalid @enderror" name="plant_finish" placeholder="Plan Finish" value="{{ old('plan_finish') }}">
+                                <input type="date" class="form-control @error('plan_finish') is-invalid @enderror" name="plan_finish" placeholder="Plan Finish" value="{{ old('plan_finish') }}">
 
                                 @error('plan_finish')
                                     <div class="invalid-feedback">

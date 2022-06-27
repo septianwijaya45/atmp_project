@@ -10,7 +10,7 @@
         <div class="col-12 col-md-6 order-md-2 order-first">
             <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
                     <li class="breadcrumb-item" aria-current="page">ATMP</li>
                     <li class="breadcrumb-item active" aria-current="page">Detail ATMP {{$name}}</li>
                 </ol>
@@ -35,7 +35,11 @@
             <div class="card-header">
                 <h4 class="card-title">Form Detail Data</h4>
             </div>
-            <form action="{{ route('updatePlant', ['name' => $name, 'id' => $id]) }}" method="POST" enctype="multipart/form-data" autocomplete="off">
+            @if(Auth::user()->role_id == 1)
+                <form action="{{ route('updateATMP', ['name' => $name, 'id' => $id, 'atmp_name' => $atmp_name]) }}" method="POST" enctype="multipart/form-data" autocomplete="off">
+            @else
+                <form action="{{ route('a.updateATMP', ['name' => $name, 'id' => $id, 'atmp_name' => $atmp_name]) }}" method="POST" enctype="multipart/form-data" autocomplete="off">
+            @endif
                 @csrf
                 <div class="card-body">
                     <div class="row">
@@ -59,7 +63,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="plan_start">Plan Start</label>
-                                <input type="date" class="form-control @error('plan_start') is-invalid @enderror" name="plan_start" placeholder="Plant Start" value="{{$data->plan_start}}">
+                                <input type="date" class="form-control @error('plan_start') is-invalid @enderror" name="plan_start" placeholder="Plan Start" value="{{$data->plan_start}}">
 
                                 @error('plan_start')
                                     <div class="invalid-feedback">
@@ -111,7 +115,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="plan_finish">Plan Finish</label>
-                                <input type="date" class="form-control @error('plan_finish') is-invalid @enderror" name="plant_finish" placeholder="Plan Finish" value="{{$data->plan_finish}}">
+                                <input type="date" class="form-control @error('plan_finish') is-invalid @enderror" name="plan_finish" placeholder="Plan Finish" value="{{$data->plan_finish}}">
 
                                 @error('plan_finish')
                                     <div class="invalid-feedback">
@@ -173,6 +177,7 @@
 @stop
 
 @section('footer')
+@if(Auth::user()->role_id == 1)
 <script type="text/javascript">
     $('#btn-del').on('click', function(){
         swal({
@@ -190,12 +195,12 @@
                     }
                 });
             $.ajax({
-                    url: "http://127.0.0.1:8001/Administrator/ATMP/Delete-Data/{!! $name !!}/{!! $id !!}",
+                    url: "http://127.0.0.1:8000/Administrator/ATMP/Delete-Data/{!! $name !!}/{!! $id !!}/{!! $atmp_name !!}",
                     method: 'GET',
                     success: function (results) {
                         swal("Berhasil!", "Data Berhasil Dihapus!", "success");
                         setTimeout(() => {
-                            window.location.url= "{{route($name, $name)}}";
+                            window.location.href= "{{route($name, [$name, $atmp_name])}}";
                         }, 1000)
                     },
                     error: function (results) {
@@ -207,5 +212,42 @@
             }
         });
     });
-    </script>
+</script>
+@else
+<script type="text/javascript">
+    $('#btn-del').on('click', function(){
+        swal({
+            title: "Are you sure?",
+            text: "Delete Data? You will not be able to recover this data file!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+            $.ajax({
+                    url: "http://127.0.0.1:8000/Admin/ATMP/Delete-Data/{!! $name !!}/{!! $id !!}/{!! $atmp_name !!}",
+                    method: 'GET',
+                    success: function (results) {
+                        swal("Berhasil!", "Data Berhasil Dihapus!", "success");
+                        setTimeout(() => {
+                            window.location.href= "{{route('a.'.$name, [$name, $atmp_name])}}";
+                        }, 1000)
+                    },
+                    error: function (results) {
+                        swal("GAGAL!", "Gagal Menghapus Data!", "error");
+                    }
+                });
+            } else {
+                swal("Your data timeframe is safe!");
+            }
+        });
+    });
+</script>
+@endif
 @stop
