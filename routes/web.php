@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Backend\AdminController;
 use App\Http\Controllers\Backend\AtmpController;
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\SertifikasiController;
 use App\Http\Controllers\Backend\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Jenissite;
@@ -75,6 +76,14 @@ Route::group(['middleware' => ['web', 'auth', 'roles']], function(){
         Route::group(['prefix'  => 'Profile'], function(){
             Route::get('/{id}', [UserController::class, 'index'])->name('profile');
             Route::post('/Simpan-Data/{id}', [UserController::class, 'update'])->name('updateProfile');
+        });
+
+        // Sertifikasi
+        Route::group(['prefix'  =>  'Sertifikasi'], function(){
+            Route::get('/', [SertifikasiController::class, 'index'])->name('sertifikasi');
+            Route::post('/', [SertifikasiController::class, 'index'])->name('searchSertifikasi');
+            Route::get('/Tambah-Data', [SertifikasiController::class, 'insert'])->name('addSertifikasi');
+            Route::post('/Tambah-Data', [SertifikasiController::class, 'store'])->name('storeSertifikasi');
         });
     });
 

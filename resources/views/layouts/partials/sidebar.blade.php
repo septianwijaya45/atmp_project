@@ -83,6 +83,12 @@ use Illuminate\Support\Facades\Auth;
                     </ul>
                 </li>
                 @if(Auth::user()->role_id == 1)
+                    <li class="sidebar-item  ">
+                        <a href="{{ route('sertifikasi') }}" class='sidebar-link'>
+                            <i class="bi bi-people"></i>
+                            <span>Sertifikasi</span>
+                        </a>
+                    </li>
                     <li class="sidebar-title">User</li>
 
                     <li class="sidebar-item  ">
